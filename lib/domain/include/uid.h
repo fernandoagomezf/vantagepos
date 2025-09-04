@@ -4,22 +4,24 @@
 
 #include <stdint.h>
 
-const size_t ID_BUFFER_SIZE = 16;
-const size_t ID_STRING_BUFFER_SIZE = 37;
+#define UID_ARRAY_SIZE  16
+#define UID_STR_SIZE    37
 
-struct uid {
-    uint8_t bytes[16];
-};
+typedef struct {
+    uint8_t bytes[UID_ARRAY_SIZE];
+} uid;
 
-enum uid_result {
+typedef enum {
     uid_result_success = 0, 
     uid_result_nullarg, 
-    uid_result_invalidarg
-};
+    uid_result_invalidbuffer, 
+    uid_result_formaterror
+} uid_result;
 
-struct uid* uid_new();
-enum uid_result uid_generate(struct uid* id);
-enum uid_result uid_tostring(struct uid* id, char* buffer);
-void uid_delete(struct uid* id);
+uid* uid_new();
+uid_result uid_generate(uid* id);
+uid_result uid_tostring(const uid* id, char* buffer, size_t buffer_size);
+int uid_equals(const uid* first, const uid* second);
+void uid_delete(uid* id);
 
 #endif

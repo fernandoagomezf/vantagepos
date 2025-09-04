@@ -19,6 +19,7 @@ typedef enum {
 } uid_result;
 
 uid* uid_new();
+uid* uid_init(uid* id);
 uid_result uid_generate(uid* id);
 uid_result uid_tostring(const uid* id, char* buffer, size_t buffer_size);
 int uid_equals(const uid* first, const uid* second);

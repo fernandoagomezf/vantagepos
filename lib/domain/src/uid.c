@@ -9,8 +9,22 @@
 uid* uid_new() {
     uid* id;
     id = malloc(sizeof(uid));
-    memset(&id, 0, sizeof(uid));
+    uid_init(id);
     return id;
+}
+
+uid* uid_init(uid* id) {
+    if (id != NULL) {
+        memset(&id, 0, sizeof(uid));
+    }
+    return id;
+}
+
+void uid_delete(uid* id) {
+    assert(id != NULL);
+    if (id != NULL) {
+        free(id);
+    }
 }
 
 uid_result uid_generate(uid* id) {
@@ -34,7 +48,7 @@ uid_result uid_generate(uid* id) {
     return uid_result_success;
 }
 
-uid_result uid_tostring(const uid* id, char* buffer, size_t buffer_size) {
+uid_result uidostring(const uid* id, char* buffer, size_t buffer_size) {
     if (id == NULL || buffer == NULL) {
         return uid_result_nullarg;
     }
@@ -71,10 +85,5 @@ int uid_equals(const uid* first, const uid* second) {
     return result;
 }
 
-void uid_delete(uid* id) {
-    assert(id != NULL);
-    if (id != NULL) {
-        free(id);
-    }
-}
+
 

@@ -1,0 +1,64 @@
+# banderas para compilar usando Microsoft NMake Makefile con una librería estática
+CC = cl
+CFLAGS = /nologo /TC /W4 /std:c17 /Zi /Od /J /D_CRT_SECURE_NO_WARNINGS
+LIBS = legacy_stdio_definitions.lib
+INCLUDES = /Ilib/domain/include /Ilib/infrastructure/include /Ilib/application/include /Icli/include
+
+# objetivos
+TARGET = build\pos.exe
+DOMAIN_LIB = build\domain.lib
+INFRASTRUCTURE_LIB = build\infrastructure.lib 
+APPLICATION_LIB = build\application.lib
+
+# archivos fuente de las librerías y de la aplicación cliente (CLI)
+DOMAIN_SRCS = lib\domain\src\uid.c
+INFRASTRUCTURE_SRCS = lib\infrastructure\src\isdummy.c 
+APPLICATION_SRCS = lib\application\src\apdummy.c
+CLI_SRCS = cli\src\main.c
+
+# objetos generados por el compilador
+DOMAIN_OBJS = build\uid.obj
+INFRASUTRCUTE_OBJS = build\isdummy.obj
+APPLICATION_OBJS = build\apdummy.obj
+CLI_OBJS = build\main.obj
+
+# objetivo general
+all: $(TARGET)
+
+$(TARGET): $(DOMAIN_LIB) $(INFRASTRUCTURE_LIB) $(APPLICATION_LIB) $(CLI_OBJS)
+	link /nologo $(CLI_OBJS) $(APPLICATION_LIB) $(INFRASUTRCUTE_LIB) $(DOMAIN_LIB) /out:$@ $(LIBS) /MACHINE:X64
+
+# crear librería estática para los objetos del dominio
+$(DOMAIN_LIB): $(DOMAIN_OBJS)
+	lib /nologo $(DOMAIN_OBJS) /out:$@
+
+# crear librería estática para los objetos de infraestructura
+$(INFRASTRUCTURE_LIB): $(INFRASTRUCTURE_OBJS)
+	lib /nologo $(INFRASTRUCTURE_OBJS) /out:$@
+
+# crear librería estática para los objetos de aplicación
+$(APPLICATION_LIB): $(APPLICATION_OBJS)
+	lib /nologo $(APPLICATION_OBJS) /out:$@
+
+
+# reglas de compilación para los objetos de dominio
+build\uid.obj: lib\domain\src\uid.c
+	$(CC) $(CFLAGS) $(INCLUDES) /c $** /Fo$@
+
+# reglas de compilación para los objetos de infrastructura
+build\isdummy.obj: lib\infrastructure\src\isdummy.c
+	$(CC) $(CFLAGS) $(INCLUDES) /c $** /Fo$@
+
+# reglas de compilación para los objetos de aplicación
+build\apdummy.obj: lib\application\src\apdummy.c
+	$(CC) $(CFLAGS) $(INCLUDES) /c $** /Fo$@
+
+# reglas de compilación para los objetos del cliente
+build\main.obj: cli\src\main.c  
+	$(CC) $(CFLAGS) $(INCLUDES) /c $** /Fo$@
+
+#limpiar y terminar
+clean:
+	del /Q build\*.obj build\*.exe build\*.lib 2>nul
+
+.PHONY: all clean

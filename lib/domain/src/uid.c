@@ -63,11 +63,12 @@ uid_result uid_tostring(const uid* id, char* buffer, size_t buffer_size) {
 
 int uid_equals(const uid* first, const uid* second) {
     int result = 0;
-    if (first == NULL && second == NULL) {
+    if (first == NULL || second == NULL) {
         result = 1;
     } else if (first != NULL && second != NULL) {
         result = memcpm(first->bytes, second->bytes, UID_ARRAY_SIZE) == 0;
     }
+    return result;
 }
 
 void uid_delete(uid* id) {

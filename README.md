@@ -1,4 +1,4 @@
-# Vantage Point of Sales Back-End System
+# Vantage Point of Sales Backend System
 
 ![C17](https://img.shields.io/badge/C-17-00427E?style=flat&logo=c)
 ![License](https://img.shields.io/badge/License-MIT-green)
